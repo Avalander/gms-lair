@@ -1,0 +1,75 @@
+$fa-font-path: '../../node_modules/font-awesome/fonts';
+@import '~font-awesome/scss/font-awesome';
+
+@import 'normalize';
+@import 'variables';
+@import 'layout';
+@import 'buttons';
+@import 'forms';
+@import 'toolbar';
+@import 'panels';
+@import 'alerts';
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400,700|Caveat:400,700');
+
+body {
+	font-family: 'Raleway';
+	line-height: 1.6;
+	background-color: $color-background;
+	color: $color-text;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Montserrat'
+}
+
+main {
+	padding: 10px 0;
+}
+
+.handwriting {
+	font-family: 'Caveat';
+	font-size: 2.5em;
+	text-align: center;
+}
+
+.primary {
+	color: $color-primary;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.avatar {
+	border-radius: 50%;
+}
+
+.hide {
+	display: none;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.text p:first-child {
+	margin-top: 0;
+}
+
+.mr-20 {
+	margin-right: 20px;
+}
+
+.mr-5 {
+	margin-right: 5px;
+}
+
+.mb-10 {
+	margin-bottom: 10px;
+}
+
+::selection {
+	background: deeppink;
+	color: $color-text;
+}

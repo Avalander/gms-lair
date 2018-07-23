@@ -1,0 +1,35 @@
+@import 'scss/variables';
+
+$toolbar-height: 54px;
+
+.toolbar {
+	background-color: $color-primary;
+	//background: linear-gradient(135deg, $color-primary, #7c3399);
+	font-size: 24px;
+	height: $toolbar-height;
+	display: flex;
+	align-items: center;
+	padding: 0 20px;
+	box-shadow: $box-shadow-sm;
+	z-index: 99;
+
+	&.fixed {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+
+	i, span {
+		margin-right: 20px;
+	}
+
+	.toolbar-icon {
+		padding: 10px;
+		margin-right: 10px;
+	}
+}
+
+.with-fixed-toolbar {
+	margin-top: $toolbar-height;
+}
