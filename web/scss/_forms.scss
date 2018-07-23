@@ -7,7 +7,7 @@ input, textarea {
 	//background: inherit;
 	background: $color-input;
 	color: inherit;
-	border: none;
+	border: 1px solid $color-input;
 	padding: 10px;
 
 	&:focus {
@@ -20,6 +20,10 @@ input, textarea {
 	&::placeholder {
 		color: $gray-400;
 	}
+}
+
+form {
+	width: 95%;
 }
 
 .form-group {

@@ -30,7 +30,7 @@ module.exports = ({ base_dir, folders }) => merge(common({ base_dir, folders }),
 		hot: true,
 		stats: 'minimal',
 		historyApiFallback: {
-			index: '/index.html'
+			index: '/index.html',
 		},
 		proxy: {
 			'/api': 'http://localhost:3015',

@@ -7,6 +7,7 @@ const fallback = require('express-history-api-fallback')
 
 const makeDatabase = require('database')
 const makeAdventureApi = require('adventure/api')
+const makeUserApi = require('user')
 
 
 // Configure app
@@ -28,6 +29,7 @@ console.log(`Starting connection to ${DB_URL}...`)
 database()
 	.then(db => {
 		app.use('/api', makeAdventureApi({ Router, db }))
+		app.use('/api', makeUserApi({ Router, db }))
 		
 		app.listen(PORT,
 			() => console.log(`Server listening on port ${PORT}.`)
