@@ -6,7 +6,8 @@
   "scripts": {
     "server": "NODE_PATH=api:shared node api/main.js",
     "client": "webpack-dev-server --env=development",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:api",
+    "test:api": "NODE_PATH=api:shared:api/__test__ tape 'api/**/*.test.js' | tap-diff"
   },
   "keywords": [],
   "author": "",
