@@ -14,11 +14,13 @@ const makeUserApi = require('./user.api')
 
 module.exports = ({ SECRET, Router, db }) => {
 	const findUser = makeFindUser({ db })
+	const authenticate = makeAuthenticate({ SECRET })
 
 	return makeUserApi({
 		Router,
 		createInviteToken: makeCreateInviteToken({ db }),
 		registerUser: makeRegisterUser({ db }),
 		signIn: makeSignIn({ SECRET, findUser }),
+		authenticate,
 	})
 }

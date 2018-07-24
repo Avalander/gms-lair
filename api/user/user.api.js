@@ -22,10 +22,10 @@ const handleSuccess = res => result =>
 	res.json(result)
 
 
-module.exports = ({ Router, createInviteToken, registerUser, signIn }) => {
+module.exports = ({ Router, createInviteToken, registerUser, signIn, authenticate }) => {
 	const api = Router()
 
-	api.post('/user/invite-token', (req, res) =>
+	api.post('/user/invite-token', authenticate, (req, res) =>
 		createInviteToken()
 			.fork(
 				handleError(res),
