@@ -2,21 +2,24 @@ const path = require('path')
 
 const express = require('express')
 const { Router } = express
+const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fallback = require('express-history-api-fallback')
 
 const makeDatabase = require('database')
 const makeAdventureApi = require('adventure/api')
+const makeUserApi = require('user')
 
 
 // Configure app
 
 require('dotenv').config()
 
-const { DB_URL, DB_NAME, PORT } = process.env
+const { DB_URL, DB_NAME, PORT, SECRET } = process.env
 
 const app = express()
 app.disable('x-powered-by')
+app.use(cookieParser())
 app.use(bodyParser.json())
 
 const database = makeDatabase(DB_URL, DB_NAME)
@@ -28,6 +31,7 @@ console.log(`Starting connection to ${DB_URL}...`)
 database()
 	.then(db => {
 		app.use('/api', makeAdventureApi({ Router, db }))
+		app.use('/api', makeUserApi({ SECRET, Router, db }))
 		
 		app.listen(PORT,
 			() => console.log(`Server listening on port ${PORT}.`)

@@ -12,6 +12,8 @@ const htmlPage = (folder, name, chunks) =>
 module.exports = ({ base_dir, folders }) => ({
 	entry: {
 		main: path.resolve(folders.app, 'main.js'),
+		register: path.resolve(folders.src, 'register.js'),
+		login: path.resolve(folders.src, 'login.js'),
 	},
 	output: {
 		path: folders.dist,
@@ -80,11 +82,14 @@ module.exports = ({ base_dir, folders }) => ({
 	},
 	plugins: [
 		htmlPage(folders.app, 'index.html', [ 'main' ]),
+		htmlPage(folders.src, 'register.html', [ 'register' ]),
+		htmlPage(folders.src, 'login.html', [ 'login' ]),
 	],
 	resolve: {
 		modules: [
 			folders.app,
 			folders.src,
+			folders.shared,
 			'node_modules',
 		]
 	},
