@@ -5,16 +5,14 @@ const {
 } = require('./user.store')
 
 const {
-	makeAuthenticate,
 	makeSignIn,
 } = require('./user.auth')
 
 const makeUserApi = require('./user.api')
 
 
-module.exports = ({ SECRET, Router, db }) => {
+module.exports = ({ SECRET, Router, db, authenticate }) => {
 	const findUser = makeFindUser({ db })
-	const authenticate = makeAuthenticate({ SECRET })
 
 	return makeUserApi({
 		Router,

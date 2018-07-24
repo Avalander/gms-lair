@@ -13,6 +13,15 @@ $toolbar-height: 54px;
 	box-shadow: $box-shadow-sm;
 	z-index: 99;
 
+	a {
+		text-decoration: none;
+		color: inherit;
+
+		&:visited {
+			color: inherit;
+		}
+	}
+
 	&.fixed {
 		position: fixed;
 		top: 0;

@@ -6,8 +6,12 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const fallback = require('express-history-api-fallback')
 
-const makeDatabase = require('database')
-const makeAdventureApi = require('adventure/api')
+const {
+	makeDatabase,
+	makeIdGenerator,
+} = require('database')
+const { makeAuthenticate } = require('user/user.auth')
+const makeAdventureApi = require('adventure')
 const makeUserApi = require('user')
 
 
@@ -23,6 +27,7 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 
 const database = makeDatabase(DB_URL, DB_NAME)
+const authenticate = makeAuthenticate({ SECRET })
 
 
 // Start app
@@ -30,8 +35,10 @@ const database = makeDatabase(DB_URL, DB_NAME)
 console.log(`Starting connection to ${DB_URL}...`)
 database()
 	.then(db => {
-		app.use('/api', makeAdventureApi({ Router, db }))
-		app.use('/api', makeUserApi({ SECRET, Router, db }))
+		const idGenerator = makeIdGenerator({ db })
+
+		app.use('/api', makeUserApi({ SECRET, Router, db, authenticate }))
+		//app.use('/api', makeAdventureApi({ Router, db, authenticate, idGenerator }))
 		
 		app.listen(PORT,
 			() => console.log(`Server listening on port ${PORT}.`)
