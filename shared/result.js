@@ -8,6 +8,7 @@ const base = {
 const error_codes = {
 	OTHER: 1,
 	INVALID_DATA: 2,
+	INVALID_CREDENTIALS: 3,
 }
 
 const Result = Object.keys(error_codes)

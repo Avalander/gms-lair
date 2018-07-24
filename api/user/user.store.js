@@ -4,6 +4,18 @@ const Future = require('fluture')
 const { Result } = require('result')
 
 
+module.exports.makeFindUser = ({ db }) => (username, password) =>
+	Future.node(done =>
+		db.collection('users')
+			.findOne({ username }, done)
+	)
+	.chain(user =>
+		(user && bcrypt.compareSync(password, user.password)
+			? Future.of(user)
+			: Future.reject(Result.INVALID_CREDENTIALS('User not found'))
+		)
+	)
+
 module.exports.makeCreateInviteToken = ({ db }) => () =>
 	Future.node(done =>
 		db.collection('invite-tokens')
@@ -54,9 +66,13 @@ module.exports.makeRegisterUser = ({ db }) => ({ username, password, token }) =>
 				}, null, done)
 		)
 	)
-	.map(({ insertedId }) =>
-		Result.success({ insertedId })
+	.chain(({ insertedId }) =>
+		Future.node(done =>
+			db.collection('users')
+				.findOne({ _id: insertedId }, done)
+		)
 	)
+	.map(Result.success)
 
 const hashPassword = password =>
 	Future.tryP(() => bcrypt.hash(password, 10))

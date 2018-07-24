@@ -6,6 +6,7 @@
   "scripts": {
     "server": "NODE_PATH=api:shared node api/main.js",
     "client": "webpack-dev-server --env=development",
+    "build": "webpack --env=production",
     "test": "npm run test:api",
     "test:api": "NODE_PATH=api:shared:api/__test__ tape 'api/**/*.test.js' | tap-diff"
   },
@@ -21,7 +22,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "css-loader": "^1.0.0",
-    "extract-text-webpack-plugin": "^3.0.2",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "font-awesome": "^4.7.0",
     "html-webpack-plugin": "^3.2.0",
@@ -45,6 +46,7 @@
     "express": "^4.16.3",
     "express-history-api-fallback": "^2.2.1",
     "fluture": "^8.0.2",
+    "jsonwebtoken": "^8.3.0",
     "mongodb": "^3.1.1"
   }
 }

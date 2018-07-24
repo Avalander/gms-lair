@@ -1,22 +1,35 @@
-const { toFuture } = require('result')
+const { Result, toFuture } = require('result')
 const { makeValidator } = require('dto-validator')
 
 const validateNewUser = makeValidator(
 	[ 'username', 'password', 'token' ]
 )
 
+const validateLogin = makeValidator(
+	[ 'username', 'password' ]
+)
 
-module.exports = ({ Router, createInviteToken, registerUser }) => {
+const loginUser = res => ({ token, user }) =>
+	res.cookie('bearer', token, { httpOnly: true })
+		.json(Result.success({ username: user.username }))
+
+const handleError = res => error => {
+	console.debug(error)
+	res.json(error)
+}
+
+const handleSuccess = res => result =>
+	res.json(result)
+
+
+module.exports = ({ Router, createInviteToken, registerUser, signIn }) => {
 	const api = Router()
 
 	api.post('/user/invite-token', (req, res) =>
 		createInviteToken()
 			.fork(
-				error => {
-					console.debug(error),
-					res.json(error)
-				},
-				result => res.json(result)
+				handleError(res),
+				handleSuccess(res)
 			)
 	)
 
@@ -24,13 +37,22 @@ module.exports = ({ Router, createInviteToken, registerUser }) => {
 		toFuture(validateNewUser(req.body))
 			.map(({ data }) => data)
 			.chain(registerUser)
+			.chain(() => signIn(req.body))
 			.fork(
-				error => {
-					console.debug(error),
-					res.json(error)
-				},
-				result => res.json(result)
+				handleError(res),
+				loginUser(res)
 			)
+	)
+
+	api.post('/user/login', (req, res) =>
+		toFuture(validateLogin(req.body))
+			.map(({ data }) => data)
+			.chain(signIn)
+			.fork(
+				handleError(res),
+				loginUser(res)
+			)
+
 	)
 
 	return api
