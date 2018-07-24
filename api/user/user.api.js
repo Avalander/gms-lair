@@ -1,4 +1,4 @@
-const { Result, toFuture } = require('result')
+const { toFuture } = require('result')
 const { makeValidator } = require('dto-validator')
 
 const validateNewUser = makeValidator(
