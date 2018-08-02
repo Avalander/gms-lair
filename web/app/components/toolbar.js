@@ -1,4 +1,4 @@
-import { header, i, a } from '@hyperapp/html'
+import { header, i } from '@hyperapp/html'
 import { Link } from '@hyperapp/router'
 import { fromNullable } from '@avalander/fun/src/maybe'
 

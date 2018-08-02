@@ -48,8 +48,8 @@ const AdventureList = adventures =>
 			adventures => adventures
 		)
 
-const AdventureHeader = ({ title, author }) =>
-	article({ class: 'adventure-header' }, [
+const AdventureHeader = ({ _id, title, author }) =>
+	Link({ class: 'adventure-header', to: `/adventure/${_id}` }, [
 		h4({ class: 'adventure-title'}, title),
 		span(`Created by ${author}`),
 	])
