@@ -24,7 +24,7 @@ module.exports.makeIdGenerator = ({ db }) => name =>
 			db.collection('_id-table')
 				.save(incNextId(id_gen), done)
 		)
-		.map(() => id_gen.next_id)
+		.map(() => id_gen.next_id.toString(16))
 	)
 
 const incNextId = id_gen =>

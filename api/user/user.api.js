@@ -35,7 +35,6 @@ module.exports = ({ Router, createInviteToken, registerUser, signIn, authentica
 
 	api.post('/user/register', (req, res) =>
 		toFuture(validateNewUser(req.body))
-			.map(({ data }) => data)
 			.chain(registerUser)
 			.chain(() => signIn(req.body))
 			.fork(
@@ -46,7 +45,6 @@ module.exports = ({ Router, createInviteToken, registerUser, signIn, authentica
 
 	api.post('/user/login', (req, res) =>
 		toFuture(validateLogin(req.body))
-			.map(({ data }) => data)
 			.chain(signIn)
 			.fork(
 				handleError(res),

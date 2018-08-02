@@ -1,6 +1,6 @@
 const { makeValidator } = require('dto-validator')
 
-const { Result } = require('result')
+const { Result, toFuture } = require('result')
 
 
 const handleError = res => error => {
@@ -16,18 +16,24 @@ const validateAdventure = makeValidator(
 	[ 'summary' ]
 )
 
-module.exports = ({ Router, authenticate, findAdventures }) => {
+module.exports = ({ Router, authenticate, findAdventures, saveAdventure }) => {
 	const api = Router()
 
 	api.get('/adventures', authenticate, (req, res) =>
-		res.json(Result.success(fake))
-		/*
 		findAdventures(req.bearer.user)
 			.fork(
-				handleError,
-				handleSuccess
+				handleError(res),
+				handleSuccess(res)
 			)
-			*/
+	)
+
+	api.post('/adventures', authenticate, (req, res) =>
+		toFuture(validateAdventure(Object.assign({}, req.body, { author: req.bearer.user })))
+			.chain(saveAdventure)
+			.fork(
+				handleError(res),
+				handleSuccess(res)
+			)
 	)
 
 	return api

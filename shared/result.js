@@ -9,6 +9,7 @@ const error_codes = {
 	OTHER: 1,
 	INVALID_DATA: 2,
 	INVALID_CREDENTIALS: 3,
+	NOT_FOUND: 4,
 }
 
 const Result = Object.keys(error_codes)
@@ -30,7 +31,7 @@ const mapCodeToResult = code =>
 
 const toFuture = result =>
 	(result.ok
-		? Future.of(result)
+		? Future.of(result.data)
 		: Future.reject(result)
 	)
 
