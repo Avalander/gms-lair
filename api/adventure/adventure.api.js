@@ -1,8 +1,10 @@
 const { makeValidator } = require('dto-validator')
 
+const { Result } = require('result')
+
 
 const handleError = res => error => {
-	console.debug(error)
+	console.error(error)
 	res.json(error)
 }
 
@@ -18,12 +20,26 @@ module.exports = ({ Router, authenticate, findAdventures }) => {
 	const api = Router()
 
 	api.get('/adventures', authenticate, (req, res) =>
+		res.json(Result.success(fake))
+		/*
 		findAdventures(req.bearer.user)
 			.fork(
 				handleError,
 				handleSuccess
 			)
+			*/
 	)
 
 	return api
 }
+
+const fake = [{
+	title: 'Long lost love poem',
+	author: 'Avalander',
+}, {
+	title: 'There and back again',
+	author: 'J.R.R. Tolkien',
+}, {
+	title: 'Behind the forest of Nevermore',
+	author: 'Avalander'
+}]

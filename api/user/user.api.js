@@ -10,11 +10,11 @@ const validateLogin = makeValidator(
 )
 
 const loginUser = res => ({ token, user }) =>
-	res.cookie('bearer', token, { httpOnly: true })
+	res.cookie('bearer', token, { httpOnly: true, maxAge: 5 * 60 * 60 * 1000 })
 		.json(Result.success({ username: user.username }))
 
 const handleError = res => error => {
-	console.debug(error)
+	console.error(error)
 	res.json(error)
 }
 

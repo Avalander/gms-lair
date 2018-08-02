@@ -91,6 +91,11 @@ module.exports = ({ base_dir, folders }) => ({
 			folders.src,
 			folders.shared,
 			'node_modules',
-		]
+		],
+		alias: {
+			App: folders.app,
+			Shared: folders.shared,
+			Style: folders.scss,
+		}
 	},
 })

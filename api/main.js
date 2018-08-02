@@ -38,7 +38,7 @@ database()
 		const idGenerator = makeIdGenerator({ db })
 
 		app.use('/api', makeUserApi({ SECRET, Router, db, authenticate }))
-		//app.use('/api', makeAdventureApi({ Router, db, authenticate, idGenerator }))
+		app.use('/api', makeAdventureApi({ Router, db, authenticate, idGenerator }))
 		
 		app.listen(PORT,
 			() => console.log(`Server listening on port ${PORT}.`)
