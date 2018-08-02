@@ -28,10 +28,6 @@ module.exports.makeSaveAdventure = ({ db, idGenerator, findAdventure }) => adve
 		: idGenerator('adventures')
 			.map(_id => createAdventure(_id, adventure))
 	)
-	.map(x => {
-		console.log(x)
-		return x
-	})
 	.chain(adventure =>
 		Future.node(done =>
 			db.collection('adventures')
