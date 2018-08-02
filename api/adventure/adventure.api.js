@@ -16,11 +16,19 @@ const validateAdventure = makeValidator(
 	[ 'summary' ]
 )
 
-module.exports = ({ Router, authenticate, findAdventures, saveAdventure }) => {
+module.exports = ({ Router, authenticate, findAdventures, findAdventure, saveAdventure }) => {
 	const api = Router()
 
 	api.get('/adventures', authenticate, (req, res) =>
 		findAdventures(req.bearer.user)
+			.fork(
+				handleError(res),
+				handleSuccess(res)
+			)
+	)
+
+	api.get('/adventures/:id', authenticate, (req, res) =>
+		findAdventure({ _id: req.params.id })
 			.fork(
 				handleError(res),
 				handleSuccess(res)

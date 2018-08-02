@@ -1,18 +1,23 @@
 import * as welcome from 'App/pages/welcome'
 import * as adventureList from 'App/pages/adventure-list'
 import * as adventureEdit from 'App/pages/adventure-edit'
+import * as adventureDetail from 'App/pages/adventure.detail'
 
 
 export default [{
 	path: '/welcome',
 	title: 'Welcome',
-	render: welcome.view,
+	view: welcome.view,
 }, {
 	path: '/adventure-list',
 	title: 'Adventures',
-	render: adventureList.view,
+	view: adventureList.view,
 }, {
 	path: '/adventure/new/edit',
 	title: 'Adventure',
-	render: adventureEdit.view,
+	view: adventureEdit.view,
+}, {
+	path: '/adventure/:id',
+	title: 'Adventure',
+	view: adventureDetail.view,
 }]

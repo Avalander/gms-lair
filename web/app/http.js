@@ -9,3 +9,8 @@ export const postJson = body =>
 			? body
 			: JSON.stringify(body),
 	})
+
+export const fetchJson = () =>
+	({
+		credentials: 'same-origin'
+	})
