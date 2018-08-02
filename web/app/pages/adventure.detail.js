@@ -1,34 +1,34 @@
 import { article, h1, header, section } from '@hyperapp/html'
-import { action, http } from '@hyperapp/fx'
+import { action } from '@hyperapp/fx'
 import { Link } from '@hyperapp/router'
 import marked from 'marked'
 
-import { fetchJson } from 'App/http'
+import { fetchJson } from 'App/fx'
+import { RemoteData } from 'App/http'
 
 
 export const state = {
-	data: null,
+	data: RemoteData.NotAsked(),
 }
 
 export const actions = {
-	// HTTP
-	fetchAdventure: id =>
-		http(
-			`/api/adventures/${id}`,
-			'onFetchAdventureResponse',
-			fetchJson()
-		),
-	onFetchAdventureResponse: result =>
-		(result.ok
-			? action('onFetchAdventureSuccess', result)
-			: action('onFetchAdventureError', result)
-		),
-	onFetchAdventureResponse: ({ data }) => state => ({
+	setData: data => state => ({
 		...state,
 		data,
 	}),
-	onFetchAdventureError: ({ code, error }) =>
-		console.error(`${code}: ${error}`),
+	// HTTP
+	fetchAdventure: id => [
+		action('setData', RemoteData.Pending()),
+		fetchJson(
+			`/api/adventures/${id}`,
+			'onFetchAdventureResponse',
+		)
+	],
+	onFetchAdventureResponse: result =>
+		(result.ok
+			? action('setData', RemoteData.Success(result.data))
+			: action('setData', RemoteData.Failure(result))
+		),
 }
 
 
@@ -38,19 +38,31 @@ export const view = (state, actions, match) =>
 		class: 'content',
 		oncreate: () => actions.adventure_detail.fetchAdventure(match.params.id)
 	}, state.adventure_detail.data
-		? [
-			header([
-				h1(state.adventure_detail.data.title),
-			]),
-			section({
-				class: 'markdown-content',
-				oncreate: el => el.innerHTML = marked(state.adventure_detail.data.summary)
-			}),
-			section({ class: 'button-container' }, [
-				Link({ class: 'btn primary', to: `/adventure/${state.adventure_detail.data._id}/edit` },
-					'Edit'
-				),
-			]),
-		]
-		: []
+		.match({
+			NotAsked,
+			Pending,
+			Success,
+		})
 	)
+
+const NotAsked = () =>
+	[]
+
+const Pending = () =>
+	[]
+
+const Success = ({ _id, title, summary }) =>
+	[
+		header([
+			h1(title),
+		]),
+		section({
+			class: 'markdown-content',
+			oncreate: el => el.innerHTML = marked(summary)
+		}),
+		section({ class: 'button-container' }, [
+			Link({ class: 'btn primary', to: `/adventure/${_id}/edit` },
+				'Edit'
+			),
+		]),
+	]

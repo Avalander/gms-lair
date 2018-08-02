@@ -1,10 +1,10 @@
 import { article, div, input, textarea, button } from '@hyperapp/html'
-import { action, http } from '@hyperapp/fx'
+import { action } from '@hyperapp/fx'
 import { Link } from '@hyperapp/router'
 
 import { toError } from 'Shared/result'
 
-import { postJson } from 'App/http'
+import { postJson } from 'App/fx'
 import { makeNotification, NotificationList } from 'App/components/notifications'
 
 
@@ -32,10 +32,10 @@ export const actions = {
 	}),
 	// HTTP
 	save: () => ({ form }) =>
-		http(
+		postJson(
 			'/api/adventures',
 			'onSaveResponse',
-			postJson(form)
+			form,
 		),
 	onSaveResponse: result =>
 		(result.ok
@@ -67,7 +67,7 @@ export const actions = {
 const makeOnClose = x =>
 	action('adventure_edit.removeNotification', x)
 
-export const view = (state, actions) =>
+export const view = (state, actions, match) =>
 	article({ key: 'adventure-edit', class: 'content' }, [
 		NotificationList(state.adventure_edit.notifications),
 		div({ class: 'form-group' }, [
@@ -91,7 +91,7 @@ export const view = (state, actions) =>
 				class: 'btn primary',
 				onclick: () => actions.adventure_edit.save()
 			}, 'Save'),
-		])
+		]),
 	])
 
 /*

@@ -1,16 +1,9 @@
-export const postJson = body =>
-	({
-		method: 'POST',
-		credentials: 'same-origin',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: typeof body === 'string'
-			? body
-			: JSON.stringify(body),
-	})
+import { union } from '@avalander/fun/src/union'
 
-export const fetchJson = () =>
-	({
-		credentials: 'same-origin'
-	})
+
+export const RemoteData = union([
+	'NotAsked',
+	'Pending',
+	'Success',
+	'Failure',
+])

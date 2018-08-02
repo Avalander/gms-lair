@@ -5,11 +5,12 @@ import { Route, Switch, location } from '@hyperapp/router'
 
 import toolbar from 'App/components/toolbar'
 
-import * as adventureList from 'App/pages/adventure-list'
-import * as adventureEdit from 'App/pages/adventure-edit'
+import * as adventureList from 'App/pages/adventure.list'
+import * as adventureEdit from 'App/pages/adventure.edit'
 import * as adventureDetail from 'App/pages/adventure.detail'
 
 import routes from 'App/routes'
+import { makeFetchJson } from 'App/fx'
 
 import 'Style/main.scss'
 
@@ -40,5 +41,8 @@ const view = (state, actions) =>
 		])
 	])
 
-const my_app = withFx(app) (state, actions, view, document.body)
+const my_app = withFx({
+	fetchJson: makeFetchJson(),
+}) (app) (state, actions, view, document.body)
+
 location.subscribe(my_app.location)
