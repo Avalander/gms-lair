@@ -5,6 +5,17 @@
 	margin: 5px;
 	width: auto;
 	animation: fade-in 0.2s;
+
+	.close {
+		cursor: pointer;
+		float: right;
+		background: transparent;
+		border: 0;
+		padding: 0;
+		text-shadow: 0 1px 0 #fff;
+		color: #000;
+		opacity: .5;
+	}
 }
 
 @keyframes fade-in {

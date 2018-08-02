@@ -2,44 +2,87 @@ import { article, div, input, textarea, button } from '@hyperapp/html'
 import { action, http } from '@hyperapp/fx'
 import { Link } from '@hyperapp/router'
 
+import { toError } from 'Shared/result'
+
 import { postJson } from 'App/http'
+import { makeNotification, NotificationList } from 'App/components/notifications'
 
 
 export const state = {
-	title: '',
-	summary: '',
+	form: {
+		title: '',
+		summary: '',
+	},
+	notifications: [],
 }
 
 export const actions = {
-	updateState: ([ key, value ]) => state => ({
+	updateForm: ([ key, value ]) => state => ({
 		...state,
-		[key]: value,
+		form: {
+			...state.form,
+			[key]: value,
+		},
+	}),
+	removeNotification: notification => state => ({
+		...state,
+		notifications: state.notifications.filter(x =>
+			x !== notification
+		),
 	}),
 	// HTTP
-	save: () => state =>
+	save: () => ({ form }) =>
 		http(
 			'/api/adventures',
 			'onSaveResponse',
-			postJson(state)
+			postJson(form)
 		),
-	onSaveResponse: result => console.log(result),
+	onSaveResponse: result =>
+		(result.ok
+			? action('onSaveSuccess', result)
+			: action('onSaveError', result)
+		),
+	onSaveSuccess: ({ data }) => state => ({
+		...state,
+		notifications: [
+			makeNotification({
+				type: 'success',
+				message: `Adventure '${data._id}' saved.`,
+				makeOnClose,
+			})
+		]
+	}),
+	onSaveError: ({ error, code }) => state => ({
+		...state,
+		notifications: [
+			makeNotification({
+				type: 'error',
+				message: `${toError(code)}: ${error}.`,
+				makeOnClose,
+			}),
+		]
+	}),
 }
+
+const makeOnClose = x =>
+	action('adventure_edit.removeNotification', x)
 
 export const view = (state, actions) =>
 	article({ key: 'adventure-edit', class: 'content' }, [
+		NotificationList(state.adventure_edit.notifications),
 		div({ class: 'form-group' }, [
 			input({
 				type: "text",
 				placeholder: "Title",
-				value: state.adventure_edit.title,
-				oninput: ev => actions.adventure_edit.updateState([ 'title', ev.target.value ]),
+				value: state.adventure_edit.form.title,
+				oninput: ev => actions.adventure_edit.updateForm([ 'title', ev.target.value ]),
 			})
 		]),
 		div({ class: 'form-group' }, [
 			textarea({
 				placeholder: "Summary",
-				value: state.adventure_edit.summary,
-				oninput: ev => actions.adventure_edit.updateState([ 'summary', ev.target.value ]),
+				value: state.adventure_edit.form.summary,
+				oninput: ev => actions.adventure_edit.updateForm([ 'summary', ev.target.value ]),
 			})
 		]),
 		div({ class: 'button-container' }, [
