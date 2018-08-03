@@ -23,12 +23,10 @@ export const actions = {
 		fetchJson(
 			'/api/adventures',
 			'onFetchAdventures',
-			{ credentials: 'same-origin' }
 		),
 	],
 	onFetchAdventures: match({
 		SUCCESS: data => action('setAdventures', RemoteData.Success(data)),
-		INVALID_CREDENTIALS: () => window.location.href = '/login.html?to=/adventure-list',
 	}),
 	// Update state
 	setAdventures: adventures => state => ({

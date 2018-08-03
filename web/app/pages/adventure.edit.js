@@ -5,7 +5,7 @@ import { Link } from '@hyperapp/router'
 import { toError } from 'Shared/result'
 
 import { postJson, fetchJson, go } from 'App/fx'
-import { makeNotification, NotificationList } from 'App/components/notifications'
+import { makeNotification, NotificationList } from 'App/components'
 
 
 export const state = {

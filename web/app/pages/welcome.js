@@ -8,7 +8,7 @@ export const view = () =>
 	div({ key: 'welcome' }, [
 		Markdown(text),
 		div({ class: 'button-container' }, [
-			Link({ class: 'btn primary', to: '/adventure-list' }, 'Go to your adventures')
+			Link({ class: 'btn primary', to: '/adventures' }, 'Go to your adventures')
 		])
 	])
 
