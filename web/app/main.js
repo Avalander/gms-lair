@@ -3,7 +3,7 @@ import { div, main } from '@hyperapp/html'
 import { withFx } from '@hyperapp/fx'
 import { Route, Switch, location } from '@hyperapp/router'
 
-import toolbar from 'App/components/toolbar'
+import { Toolbar } from 'App/components'
 
 import * as adventureList from 'App/pages/adventure.list'
 import * as adventureEdit from 'App/pages/adventure.edit'
@@ -31,7 +31,7 @@ const actions = {
 
 const view = (state, actions) =>
 	div({ key: 'root' }, [
-		toolbar(state),
+		Toolbar(state),
 		main({ key: 'main', class: 'with-fixed-toolbar main' }, [
 			Switch({}, [
 				...routes.map(({ path, view }) =>

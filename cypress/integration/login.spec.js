@@ -4,7 +4,7 @@ describe('Login page', () => {
 	})
 
 	after(() => {
-		cy.exec('node tools.js delete_user test')
+		cy.clearDb('users')
 	})
 
 	it('Visits the login page', () => {

@@ -1,14 +1,12 @@
-import { article, div } from '@hyperapp/html'
+import { div } from '@hyperapp/html'
 import { Link } from '@hyperapp/router'
-import marked from 'marked'
+
+import { Markdown } from 'App/components'
 
 
 export const view = () =>
 	div({ key: 'welcome' }, [
-		article({
-			class: 'markdown-content',
-			oncreate: el => el.innerHTML = marked(text),
-		}),
+		Markdown(text),
 		div({ class: 'button-container' }, [
 			Link({ class: 'btn primary', to: '/adventure-list' }, 'Go to your adventures')
 		])

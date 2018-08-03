@@ -1,10 +1,10 @@
 import { article, h1, header, section } from '@hyperapp/html'
 import { action } from '@hyperapp/fx'
 import { Link } from '@hyperapp/router'
-import marked from 'marked'
 
 import { fetchJson } from 'App/fx'
 import { RemoteData } from 'App/http'
+import { Markdown } from 'App/components'
 
 
 export const state = {
@@ -56,10 +56,7 @@ const Success = ({ _id, title, summary }) =>
 		header([
 			h1(title),
 		]),
-		section({
-			class: 'markdown-content',
-			oncreate: el => el.innerHTML = marked(summary)
-		}),
+		Markdown(summary),
 		section({ class: 'button-container' }, [
 			Link({ class: 'btn primary', to: `/adventures/${_id}/edit` },
 				'Edit'

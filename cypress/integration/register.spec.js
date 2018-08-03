@@ -1,4 +1,9 @@
 describe('Register page', () => {
+	afterEach(() => {
+		cy.clearDb('users')
+		cy.clearDb('invite-tokens')
+	})
+
 	it('Visits the register page', () => {
 		cy.visit('/register.html')
 		cy.contains('Username')
@@ -23,7 +28,6 @@ describe('Register page', () => {
 		cy.get('#repeat-password').type('test1234')
 		cy.get('form').submit()
 		cy.contains('Username already exists')
-		cy.exec('node tools.js delete_user test')
 	})
 
 	it('Fails when the password is shorter than 8 characters', () => {
@@ -51,7 +55,6 @@ describe('Register page', () => {
 		cy.get('#repeat-password').type('test1234')
 		cy.get('form').submit()
 		cy.contains('Welcome')
-		cy.exec('node tools.js delete_user test2')
 	})
 
 	it('Cannot reuse a token', () => {
@@ -69,6 +72,5 @@ describe('Register page', () => {
 		cy.get('#repeat-password').type('test1234')
 		cy.get('form').submit()
 		cy.contains('Invalid token')
-		cy.exec('node tools.js delete_user test2')
 	})
 })
