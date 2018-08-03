@@ -68,7 +68,7 @@ export const actions = {
 			: action('onApiError', result)
 		),
 	onSaveSuccess: ({ data }) =>
-		go(`/adventure/${data._id}`),
+		go(`/adventures/${data._id}`),
 	onApiError: ({ error, code }) => state => ({
 		...state,
 		notifications: [
@@ -93,6 +93,7 @@ export const view = (state, actions, match) =>
 		NotificationList(state.adventure_edit.notifications),
 		div({ class: 'form-group' }, [
 			input({
+				id: 'title',
 				type: "text",
 				placeholder: "Title",
 				value: state.adventure_edit.form.title,
@@ -101,6 +102,7 @@ export const view = (state, actions, match) =>
 		]),
 		div({ class: 'form-group' }, [
 			textarea({
+				id: 'summary',
 				placeholder: "Summary",
 				value: state.adventure_edit.form.summary,
 				oninput: ev => actions.adventure_edit.updateForm([ 'summary', ev.target.value ]),
