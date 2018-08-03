@@ -17,7 +17,7 @@ export const state = {
 }
 
 export const actions = {
-	init: id =>
+	init: ({ id }) =>
 		(id
 			? [ action('clearForm'),
 				action('fetchAdventure', id) ]
@@ -88,7 +88,7 @@ export const view = (state, actions, match) =>
 	article({
 		key: 'adventure-edit',
 		class: 'content',
-		oncreate: () => actions.adventure_edit.init(match.params.id),
+		oncreate: () => actions.adventure_edit.init(match.params || {}),
 	}, [
 		NotificationList(state.adventure_edit.notifications),
 		div({ class: 'form-group' }, [
@@ -107,7 +107,7 @@ export const view = (state, actions, match) =>
 			})
 		]),
 		div({ class: 'button-container' }, [
-			Link({ class: 'btn', to: '/adventure-list' }, 'Cancel'),
+			Link({ class: 'btn', to: state.location.previous }, 'Cancel'),
 			button({
 				class: 'btn primary',
 				onclick: () => actions.adventure_edit.save()
