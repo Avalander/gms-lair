@@ -59,7 +59,7 @@ const Success = adventures =>
 			AdventureList(adventures)
 		),
 		section({ class: 'button-container' }, [
-			Link({ class: 'btn primary', to: '/adventure/new/edit' }, 'New adventure'),
+			Link({ class: 'btn primary', to: '/adventures/new/edit' }, 'New adventure'),
 		]),
 	]
 
@@ -72,7 +72,7 @@ const AdventureList = adventures =>
 		)
 
 const AdventureHeader = ({ _id, title, author }) =>
-	Link({ class: 'adventure-header', to: `/adventure/${_id}` }, [
+	Link({ class: 'adventure-header', to: `/adventures/${_id}` }, [
 		h4({ class: 'adventure-title'}, title),
 		span(`Created by ${author}`),
 	])

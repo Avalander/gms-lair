@@ -61,7 +61,7 @@ const Success = ({ _id, title, summary }) =>
 			oncreate: el => el.innerHTML = marked(summary)
 		}),
 		section({ class: 'button-container' }, [
-			Link({ class: 'btn primary', to: `/adventure/${_id}/edit` },
+			Link({ class: 'btn primary', to: `/adventures/${_id}/edit` },
 				'Edit'
 			),
 		]),

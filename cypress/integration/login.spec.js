@@ -14,6 +14,14 @@ describe('Login page', () => {
 		cy.get('form').submit()
 	})
 
+	it('Redirects after successful login if to is provided', () => {
+		cy.visit('/login.html?to=/welcome')
+		cy.get('#username').type('test')
+		cy.get('#password').type('test')
+		cy.get('form').submit()
+		cy.contains('Welcome')
+	})
+
 	it('Fails when username is empty', () => {
 		cy.visit('/login.html')
 		cy.get('form').submit()

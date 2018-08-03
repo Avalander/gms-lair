@@ -9,19 +9,19 @@ export default [{
 	title: 'Welcome',
 	view: welcome.view,
 }, {
-	path: '/adventure-list',
+	path: '/adventures',
 	title: 'Adventures',
 	view: adventureList.view,
 }, {
-	path: '/adventure/new/edit',
+	path: '/adventures/new/edit',
 	title: 'Adventure',
 	view: adventureEdit.view,
 }, {
-	path: '/adventure/:id',
+	path: '/adventures/:id',
 	title: 'Adventure',
 	view: adventureDetail.view,
 }, {
-	path: '/adventure/:id/edit',
+	path: '/adventures/:id/edit',
 	title: 'Adventure',
 	view: adventureEdit.view,
 }]
