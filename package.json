@@ -10,7 +10,8 @@
     "build": "webpack --env=production",
     "test": "npm run test:api && npm run test:shared",
     "test:api": "NODE_PATH=api:shared:api/__test__ tape 'api/**/*.test.js' | tap-diff",
-    "test:shared": "NODE_PATH=shared tape 'shared/**/*.test.js' | tap-diff"
+    "test:shared": "NODE_PATH=shared tape 'shared/**/*.test.js' | tap-diff",
+    "cypress:open": "cypress open"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "css-loader": "^1.0.0",
+    "cypress": "^3.0.3",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "font-awesome": "^4.7.0",

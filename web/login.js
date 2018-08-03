@@ -13,7 +13,7 @@ const form = {
 const validateUsername = username =>
 	username && username.length > 0
 const validatePasswordLength = password =>
-	password && password.length > 7
+	password && password.length > 0
 
 document.querySelector('#login').onsubmit = event => {
 	event.preventDefault()
@@ -52,6 +52,6 @@ document.querySelector('#login').onsubmit = event => {
 			: Promise.reject(result)
 	))
 	.catch(({ code, error }) => form.errors.innerHTML = `
-		<div class="alert-error">${toError(code)}: ${error}</div>
+		<div class="alert-error">${toError(code)}: ${error}.</div>
 	`)
 }

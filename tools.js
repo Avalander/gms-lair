@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const mongo = require('mongodb')
 const ObjectId = mongo.ObjectId
 require('dotenv').config()
@@ -33,14 +34,14 @@ const show = ([ name='users' ]) => openConnection()
 		client.close()
 	})
 
-const create_token = ([ token, ...groups ]) => Promise.all([
+const create_token = ([ token  ]) => Promise.all([
 		openConnection(),
 		generateToken(token),
 	])
 	.then(([[ db, client ], token ]) => Promise.all([
 		Promise.resolve(client),
 		Promise.resolve(token),
-		db.collection('invites').insertOne({ token, groups: groups.length > 0 ? groups : [ '1' ]}),
+		db.collection('invite-tokens').insertOne({ token }),
 	]))
 	.then(([ client, token ]) => {
 		console.log(`Created token '${token}'.`)
@@ -67,8 +68,41 @@ const remove = ([ collection, id ]) => openConnection()
 		client.close()
 	})
 
+const delete_user = ([ username ]) => openConnection()
+	.then(([ db, client ]) =>
+		Promise.all([
+			client,
+			db.collection('users')
+				.findOneAndDelete({ username })
+		])
+	)
+	.then(([ client ]) => client.close())
+
+const create_user = ([ username, password ]) =>
+	bcrypt.hash(password, 10)
+		.then(result => Promise.all([
+			result,
+			openConnection()
+		]))
+		.then(([ hash, [ db, client ]]) =>
+			Promise.all([
+				db.collection('users')
+					.insertOne({
+						username,
+						password: hash,
+					}),
+				client
+			])
+		)
+		.then(([ result, client ]) => {
+			console.log(result)
+			client.close()
+		})
+
 const commands = {
+	create_user,
 	create_token,
+	delete_user,
 	remove,
 	reset,
 	show,
