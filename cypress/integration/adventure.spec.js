@@ -29,6 +29,13 @@ describe('Adventures', () => {
 					cy.contains('The best adventure ever')
 				})
 		})
+
+		it('Should be redirected to login when credentials expire.', () => {
+			cy.clearCookie('bearer')
+			cy.visit(`/adventures`)
+			cy.url()
+				.should('contain', `/login.html?to=/adventures`)
+		})
 	})
 
 	describe('Create Adventure', () => {
@@ -93,6 +100,18 @@ describe('Adventures', () => {
 						.should('contain', `/adventures/${data._id}/edit`)
 				})
 		})
+
+		/* @TODO: figure out why it fails.
+		it('Should be redirected to login when credentials expire.', () => {
+			cy.createAdventure()
+				.then(({ data }) => {
+					cy.clearCookie('bearer')
+					cy.visit(`/adventures/${data._id}`)
+					cy.url()
+						.should('contain', `/login.html?to=/adventures/${data._id}`)
+				})
+		})
+		*/
 	})
 
 	describe('Edit adventure', () => {
@@ -142,6 +161,16 @@ describe('Adventures', () => {
 						.should('not.contain', '/edit')
 					cy.contains('This is')
 					cy.contains('Spartaaa')
+				})
+		})
+
+		it('Should be redirected to login when credentials expire.', () => {
+			cy.createAdventure()
+				.then(({ data }) => {
+					cy.clearCookie('bearer')
+					cy.visit(`/adventures/${data._id}/edit`)
+					cy.url()
+						.should('contain', `/login.html?to=/adventures/${data._id}/edit`)
 				})
 		})
 	})
