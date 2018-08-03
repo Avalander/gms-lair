@@ -24,3 +24,16 @@ Cypress.Commands.add('deleteTestUser', () => {
 Cypress.Commands.add('clearDb', (collection) => {
 	cy.exec(`node tools.js reset ${collection}`)
 })
+
+Cypress.Commands.add('createAdventure', (title='Test Adventure', summary='This is a test') => {
+	return cy.request({
+		url: '/api/adventures',
+		method: 'POST',
+		body: {
+			title,
+			summary,
+			author: 'test',
+		}
+	})
+	.then(response => response.body)
+})
