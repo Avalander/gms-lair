@@ -47,7 +47,7 @@
     "webpack-merge": "^4.1.3"
   },
   "dependencies": {
-    "@avalander/fun": "^1.0.0-beta.1",
+    "@avalander/fun": "^1.0.0-beta.2",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
