@@ -1,0 +1,35 @@
+@import 'scss/variables';
+
+.adventure-header {
+	padding: 10px 20px;
+	transition: all 0.3s;
+	display: flex;
+	flex-direction: column;
+	cursor: pointer;
+	border-bottom: 1px solid darken($color-text, 20%);
+	color: inherit;
+	text-decoration: none;
+
+	&:first-child {
+		border-top: 1px solid darken($color-text, 10%);
+	}
+
+	&:last-child {
+		border-bottom: 1px solid darken($color-text, 10%);
+	}
+
+	&:active, &:hover {
+		background: $color-primary;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	h4 {
+		margin: 0;
+		font-family: 'Merienda';
+	}
+
+	span {
+		font-size: 14px;
+	}
+}

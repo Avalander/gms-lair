@@ -9,6 +9,7 @@ const error_codes = {
 	OTHER: 1,
 	INVALID_DATA: 2,
 	INVALID_CREDENTIALS: 3,
+	NOT_FOUND: 4,
 }
 
 const Result = Object.keys(error_codes)
@@ -21,9 +22,16 @@ const Result = Object.keys(error_codes)
 		base
 	)
 
+const match = fns => result =>
+	fns[mapCodeToResult(result.code)](result.data || result.error)
+
+const mapCodeToResult = code =>
+	Object.keys(error_codes)
+		.find(k => error_codes[k] === code) || 'SUCCESS'
+
 const toFuture = result =>
 	(result.ok
-		? Future.of(result)
+		? Future.of(result.data)
 		: Future.reject(result)
 	)
 
@@ -35,5 +43,6 @@ module.exports = {
 	Result,
 	error_codes,
 	toFuture,
-	toError
+	toError,
+	match,
 }

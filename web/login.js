@@ -42,12 +42,13 @@ document.querySelector('#login').onsubmit = event => {
 		headers: {
 			'Content-Type': 'application/json',
 		},
+		credentials: 'include',
 		body: JSON.stringify({ username, password }),
 	})
 	.then(res => res.json())
 	.then(result => (
 		result.ok
-			? window.location.href = to
+			? window.location.replace(to)
 			: Promise.reject(result)
 	))
 	.catch(({ code, error }) => form.errors.innerHTML = `
