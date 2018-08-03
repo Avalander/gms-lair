@@ -1,6 +1,6 @@
 describe('Adventures', () => {
-	before(() => cy.createTestUser())
-	after(() => cy.deleteTestUser())
+	before(() => cy.createUser())
+	after(() => cy.deleteUser())
 
 	beforeEach(() => cy.login())
 	afterEach(() => cy.clearDb('adventures'))

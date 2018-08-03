@@ -21,7 +21,7 @@ describe('Register page', () => {
 	})
 
 	it('Fails when the username already exists', () => {
-		cy.exec('node tools.js create_user test test')
+		cy.createUser('test')
 		cy.visit('/register.html?token=asd')
 		cy.get('#username').type('test')
 		cy.get('#password').type('test1234')

@@ -1,6 +1,6 @@
 describe('Login page', () => {
 	before(() => {
-		cy.exec('node tools.js create_user test test')
+		cy.createUser()
 	})
 
 	after(() => {

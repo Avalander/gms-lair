@@ -13,12 +13,12 @@ Cypress.Commands.add('login', () => {
 		.should('have.property', 'httpOnly', true)
 })
 
-Cypress.Commands.add('createTestUser', () => {
-	cy.exec('node tools.js create_user test test')
+Cypress.Commands.add('createUser', (username='test', password=username) => {
+	cy.exec(`node tools.js create_user ${username} ${password}`)
 })
 
-Cypress.Commands.add('deleteTestUser', () => {
-	cy.exec('node tools.js delete_user test')
+Cypress.Commands.add('deleteUser', (username='test') => {
+	cy.exec(`node tools.js delete_user ${username}`)
 })
 
 Cypress.Commands.add('clearDb', (collection) => {
