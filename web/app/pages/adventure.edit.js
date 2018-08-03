@@ -1,20 +1,12 @@
 import { article, div, input, textarea, button } from '@hyperapp/html'
 import { action } from '@hyperapp/fx'
-import { Link, Redirect } from '@hyperapp/router'
-
-import { union } from '@avalander/fun/src/union'
+import { Link } from '@hyperapp/router'
 
 import { toError } from 'Shared/result'
 
-import { postJson, fetchJson } from 'App/fx'
+import { postJson, fetchJson, go } from 'App/fx'
 import { makeNotification, NotificationList } from 'App/components/notifications'
 
-
-const State = union([
-	'Loading',
-	'Editing',
-	'Saved',
-])
 
 export const state = {
 	form: {
@@ -58,7 +50,7 @@ export const actions = {
 	onFetchResponse: result =>
 		(result.ok
 			? action('onFetchSuccess', result)
-			: action('onError', result)
+			: action('onApiError', result)
 		),
 	onFetchSuccess: ({ data }) => state => ({
 		...state,
@@ -73,19 +65,11 @@ export const actions = {
 	onSaveResponse: result =>
 		(result.ok
 			? action('onSaveSuccess', result)
-			: action('onError', result)
+			: action('onApiError', result)
 		),
-	onSaveSuccess: ({ data }) => state => ({
-		...state,
-		notifications: [
-			makeNotification({
-				type: 'success',
-				message: `Adventure '${data._id}' saved.`,
-				makeOnClose,
-			})
-		]
-	}),
-	onError: ({ error, code }) => state => ({
+	onSaveSuccess: ({ data }) =>
+		go(`/adventure/${data._id}`),
+	onApiError: ({ error, code }) => state => ({
 		...state,
 		notifications: [
 			makeNotification({
@@ -130,56 +114,3 @@ export const view = (state, actions, match) =>
 			}, 'Save'),
 		]),
 	])
-
-const Loading = () =>
-	[]
-
-const Editing = ({ form, notifications, actions }) =>
-	[
-		NotificationList(notifications),
-		div({ class: 'form-group' }, [
-			input({
-				type: "text",
-				placeholder: "Title",
-				value: form.title,
-				oninput: ev => actions.updateForm([ 'title', ev.target.value ]),
-			})
-		]),
-		div({ class: 'form-group' }, [
-			textarea({
-				placeholder: "Summary",
-				value: form.summary,
-				oninput: ev => actions.updateForm([ 'summary', ev.target.value ]),
-			})
-		]),
-		div({ class: 'button-container' }, [
-			Link({ class: 'btn', to: '/adventure-list' }, 'Cancel'),
-			button({
-				class: 'btn primary',
-				onclick: () => actions.save()
-			}, 'Save'),
-		]),
-	]
-
-const Saved = id =>
-	[ Redirect({ to: `/adventure/${id}` }) ]
-
-/*
-# This be title
-
-This be adventure **description**.
-
-> ## Note
->
-> This be _blockquote_.
-
-- This
-- be
-- a
-- list
-
-| col 1 | col 2 |
-|-------|:-----:|
-| a     | 1     |
-| b     | 2     |
-*/

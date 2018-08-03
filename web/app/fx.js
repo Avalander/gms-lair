@@ -30,6 +30,11 @@ export const postJson = (url, action, data, options, error) =>
 		error,
 	}]
 
+export const go = url =>
+	[ 'go', {
+		url,
+	}]
+
 export const makeFetchJson = () => (props, getAction) =>
 	fetch(props.url, props.options)
 		.then(res => res.json())
@@ -44,3 +49,6 @@ export const makeFetchJson = () => (props, getAction) =>
 		.catch(error =>
 			getAction(props.error || props.action) (error)
 		)
+
+export const makeGo = () => props =>
+	window.history.pushState(null, '', props.url)

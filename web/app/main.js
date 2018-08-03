@@ -1,5 +1,5 @@
 import { app } from 'hyperapp'
-import { div, h1, main } from '@hyperapp/html'
+import { div, main } from '@hyperapp/html'
 import { withFx } from '@hyperapp/fx'
 import { Route, Switch, location } from '@hyperapp/router'
 
@@ -10,7 +10,7 @@ import * as adventureEdit from 'App/pages/adventure.edit'
 import * as adventureDetail from 'App/pages/adventure.detail'
 
 import routes from 'App/routes'
-import { makeFetchJson } from 'App/fx'
+import { makeFetchJson, makeGo } from 'App/fx'
 
 import 'Style/main.scss'
 
@@ -43,6 +43,7 @@ const view = (state, actions) =>
 
 const my_app = withFx({
 	fetchJson: makeFetchJson(),
+	go: makeGo(),
 }) (app) (state, actions, view, document.body)
 
 location.subscribe(my_app.location)
