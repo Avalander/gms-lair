@@ -13,7 +13,7 @@ const handleSuccess = res => result =>
 
 const validateAdventure = makeValidator(
 	[ 'title', 'author' ],
-	[ 'summary' ]
+	[ 'summary', '_id' ]
 )
 
 module.exports = ({ Router, authenticate, findAdventures, findAdventure, saveAdventure }) => {

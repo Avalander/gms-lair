@@ -24,18 +24,21 @@ module.exports.makeFindAdventure = ({ db }) => filters =>
 
 module.exports.makeSaveAdventure = ({ db, idGenerator, findAdventure }) => adventure =>
 	(adventure._id
-		? findAdventure({ _id })
-			.map(({ data }) => data)
+		? findAdventure({ _id: adventure._id })
+			.map(({ data }) => adventure)
 		: idGenerator('adventures')
 			.map(_id => createAdventure(_id, adventure))
 	)
 	.chain(adventure =>
-		Future.node(done =>
-			db.collection('adventures')
-				.save(adventure, done)
+		Future.both(
+			Future.node(done =>
+				db.collection('adventures')
+					.save(adventure, done)
+			),
+			Future.of(adventure._id)
 		)
 	)
-	.map(({ result }) => result.upserted[0])
+	.map(([ _, _id ]) => ({ _id }))
 	.map(Result.success)
 
 const createAdventure = (_id, adventure) =>

@@ -1,12 +1,20 @@
 import { article, div, input, textarea, button } from '@hyperapp/html'
 import { action } from '@hyperapp/fx'
-import { Link } from '@hyperapp/router'
+import { Link, Redirect } from '@hyperapp/router'
+
+import { union } from '@avalander/fun/src/union'
 
 import { toError } from 'Shared/result'
 
-import { postJson } from 'App/fx'
+import { postJson, fetchJson } from 'App/fx'
 import { makeNotification, NotificationList } from 'App/components/notifications'
 
+
+const State = union([
+	'Loading',
+	'Editing',
+	'Saved',
+])
 
 export const state = {
 	form: {
@@ -17,6 +25,17 @@ export const state = {
 }
 
 export const actions = {
+	init: id =>
+		(id
+			? [ action('clearForm'),
+				action('fetchAdventure', id) ]
+			: [ action('clearForm') ]
+		),
+	clearForm: () => state => ({
+		...state,
+		form: {},
+		notifications: [],
+	}),
 	updateForm: ([ key, value ]) => state => ({
 		...state,
 		form: {
@@ -31,6 +50,20 @@ export const actions = {
 		),
 	}),
 	// HTTP
+	fetchAdventure: id =>
+		fetchJson(
+			`/api/adventures/${id}`,
+			'onFetchResponse',
+		),
+	onFetchResponse: result =>
+		(result.ok
+			? action('onFetchSuccess', result)
+			: action('onError', result)
+		),
+	onFetchSuccess: ({ data }) => state => ({
+		...state,
+		form: data,
+	}),
 	save: () => ({ form }) =>
 		postJson(
 			'/api/adventures',
@@ -40,7 +73,7 @@ export const actions = {
 	onSaveResponse: result =>
 		(result.ok
 			? action('onSaveSuccess', result)
-			: action('onSaveError', result)
+			: action('onError', result)
 		),
 	onSaveSuccess: ({ data }) => state => ({
 		...state,
@@ -52,12 +85,12 @@ export const actions = {
 			})
 		]
 	}),
-	onSaveError: ({ error, code }) => state => ({
+	onError: ({ error, code }) => state => ({
 		...state,
 		notifications: [
 			makeNotification({
 				type: 'error',
-				message: `${toError(code)}: ${error}.`,
+				message: `${toError(code)}: ${error || 'Something went wrong'}.`,
 				makeOnClose,
 			}),
 		]
@@ -68,7 +101,11 @@ const makeOnClose = x =>
 	action('adventure_edit.removeNotification', x)
 
 export const view = (state, actions, match) =>
-	article({ key: 'adventure-edit', class: 'content' }, [
+	article({
+		key: 'adventure-edit',
+		class: 'content',
+		oncreate: () => actions.adventure_edit.init(match.params.id),
+	}, [
 		NotificationList(state.adventure_edit.notifications),
 		div({ class: 'form-group' }, [
 			input({
@@ -93,6 +130,39 @@ export const view = (state, actions, match) =>
 			}, 'Save'),
 		]),
 	])
+
+const Loading = () =>
+	[]
+
+const Editing = ({ form, notifications, actions }) =>
+	[
+		NotificationList(notifications),
+		div({ class: 'form-group' }, [
+			input({
+				type: "text",
+				placeholder: "Title",
+				value: form.title,
+				oninput: ev => actions.updateForm([ 'title', ev.target.value ]),
+			})
+		]),
+		div({ class: 'form-group' }, [
+			textarea({
+				placeholder: "Summary",
+				value: form.summary,
+				oninput: ev => actions.updateForm([ 'summary', ev.target.value ]),
+			})
+		]),
+		div({ class: 'button-container' }, [
+			Link({ class: 'btn', to: '/adventure-list' }, 'Cancel'),
+			button({
+				class: 'btn primary',
+				onclick: () => actions.save()
+			}, 'Save'),
+		]),
+	]
+
+const Saved = id =>
+	[ Redirect({ to: `/adventure/${id}` }) ]
 
 /*
 # This be title
