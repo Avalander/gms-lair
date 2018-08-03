@@ -16,12 +16,14 @@ describe('Register page', () => {
 	})
 
 	it('Fails when the username already exists', () => {
+		cy.exec('node tools.js create_user test test')
 		cy.visit('/register.html?token=asd')
 		cy.get('#username').type('test')
 		cy.get('#password').type('test1234')
 		cy.get('#repeat-password').type('test1234')
 		cy.get('form').submit()
 		cy.contains('Username already exists')
+		cy.exec('node tools.js delete_user test')
 	})
 
 	it('Fails when the password is shorter than 8 characters', () => {

@@ -1,4 +1,12 @@
 describe('Login page', () => {
+	before(() => {
+		cy.exec('node tools.js create_user test test')
+	})
+
+	after(() => {
+		cy.exec('node tools.js delete_user test')
+	})
+
 	it('Visits the login page', () => {
 		cy.visit('/login.html')
 		cy.get('#username').type('test')
