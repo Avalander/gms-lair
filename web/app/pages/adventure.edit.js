@@ -1,11 +1,11 @@
-import { article, div, input, textarea, button } from '@hyperapp/html'
+import { article, div, input, button } from '@hyperapp/html'
 import { action } from '@hyperapp/fx'
 import { Link } from '@hyperapp/router'
 
 import { toError } from 'Shared/result'
 
 import { postJson, fetchJson, go } from 'App/fx'
-import { makeNotification, NotificationList } from 'App/components'
+import { makeNotification, NotificationList, MarkdownEditor } from 'App/components'
 
 
 export const state = {
@@ -100,14 +100,12 @@ export const view = (state, actions, match) =>
 				oninput: ev => actions.adventure_edit.updateForm([ 'title', ev.target.value ]),
 			})
 		]),
-		div({ class: 'form-group' }, [
-			textarea({
-				id: 'summary',
-				placeholder: "Summary",
-				value: state.adventure_edit.form.summary,
-				oninput: ev => actions.adventure_edit.updateForm([ 'summary', ev.target.value ]),
-			})
-		]),
+		MarkdownEditor({
+			id: 'summary',
+			placeholder: "Summary",
+			value: state.adventure_edit.form.summary,
+			oninput: ev => actions.adventure_edit.updateForm([ 'summary', ev.target.value ]),
+		}),
 		div({ class: 'button-container' }, [
 			Link({ class: 'btn', to: state.location.previous }, 'Cancel'),
 			button({
