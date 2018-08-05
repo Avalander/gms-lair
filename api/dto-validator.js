@@ -1,3 +1,4 @@
+const Future = require('fluture')
 const { Result } = require('result')
 
 const exists = obj =>
