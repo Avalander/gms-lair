@@ -1,5 +1,3 @@
-const Future = require('fluture')
-
 const base = {
 	success: data => ({ ok: true, data }),
 	error: (code, error) => ({ ok: false, code, error }),
@@ -29,12 +27,6 @@ const mapCodeToResult = code =>
 	Object.keys(error_codes)
 		.find(k => error_codes[k] === code) || 'SUCCESS'
 
-const toFuture = result =>
-	(result.ok
-		? Future.of(result.data)
-		: Future.reject(result)
-	)
-
 const toError = code =>
 	Object.keys(error_codes)
 		.find(k => error_codes[k] === code)
@@ -42,7 +34,6 @@ const toError = code =>
 module.exports = {
 	Result,
 	error_codes,
-	toFuture,
 	toError,
 	match,
 }

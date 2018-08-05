@@ -1,5 +1,5 @@
-const { Result, toFuture } = require('result')
-const { makeValidator } = require('dto-validator')
+const { Result } = require('result')
+const { makeValidator, asFuture } = require('dto-validator')
 
 const validateNewUser = makeValidator(
 	[ 'username', 'password', 'token' ]
@@ -34,7 +34,7 @@ module.exports = ({ Router, createInviteToken, registerUser, signIn, authentica
 	)
 
 	api.post('/user/register', (req, res) =>
-		toFuture(validateNewUser(req.body))
+		asFuture(validateNewUser(req.body))
 			.chain(registerUser)
 			.chain(() => signIn(req.body))
 			.fork(
@@ -44,7 +44,7 @@ module.exports = ({ Router, createInviteToken, registerUser, signIn, authentica
 	)
 
 	api.post('/user/login', (req, res) =>
-		toFuture(validateLogin(req.body))
+		asFuture(validateLogin(req.body))
 			.chain(signIn)
 			.fork(
 				handleError(res),

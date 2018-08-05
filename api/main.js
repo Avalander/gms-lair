@@ -12,6 +12,7 @@ const {
 } = require('database')
 const { makeAuthenticate } = require('user/user.auth')
 const makeAdventureApi = require('adventure')
+const makeItemApi = require('item')
 const makeUserApi = require('user')
 
 
@@ -39,6 +40,7 @@ database()
 
 		app.use('/api', makeUserApi({ SECRET, Router, db, authenticate }))
 		app.use('/api', makeAdventureApi({ Router, db, authenticate, idGenerator }))
+		app.use('/api', makeItemApi({ Router, db, authenticate, idGenerator }))
 		
 		app.listen(PORT,
 			() => console.log(`Server listening on port ${PORT}.`)

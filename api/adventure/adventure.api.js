@@ -1,6 +1,4 @@
-const { makeValidator } = require('dto-validator')
-
-const { Result, toFuture } = require('result')
+const { makeValidator, asFuture } = require('dto-validator')
 
 
 const handleError = res => error => {
@@ -36,7 +34,7 @@ module.exports = ({ Router, authenticate, findAdventures, findAdventure, saveAdv
 	)
 
 	api.post('/adventures', authenticate, (req, res) =>
-		toFuture(validateAdventure(Object.assign({}, req.body, { author: req.bearer.user })))
+		asFuture(validateAdventure(Object.assign({}, req.body, { author: req.bearer.user })))
 			.chain(saveAdventure)
 			.fork(
 				handleError(res),
@@ -46,14 +44,3 @@ module.exports = ({ Router, authenticate, findAdventures, findAdventure, saveAdv
 
 	return api
 }
-
-const fake = [{
-	title: 'Long lost love poem',
-	author: 'Avalander',
-}, {
-	title: 'There and back again',
-	author: 'J.R.R. Tolkien',
-}, {
-	title: 'Behind the forest of Nevermore',
-	author: 'Avalander'
-}]

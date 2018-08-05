@@ -16,3 +16,9 @@ module.exports.makeValidator = (required_keys, optional_keys=[]) => obj => {
 	}
 	return Result.success(obj)
 }
+
+module.exports.asFuture = result =>
+	(result.ok
+		? Future.of(result.data)
+		: Future.reject(result)
+	)
