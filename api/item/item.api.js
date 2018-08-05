@@ -17,12 +17,14 @@ const validateItem = makeValidator(
 module.exports = ({ Router, authenticate, findItems, findItem, saveItem }) => {
 	const api = Router()
 
-	api.get('/adventures/:id/:type', authenticate, (req, res) =>
-		findItems(req.params.type, req.params.id)
-			.fork(
-				handleError(res),
-				handleSuccess(res)
-			)
+	api.get('/adventures/:id/items', authenticate, (req, res) =>
+		findItems({
+			adventure_id: req.params.id,
+		})
+		.fork(
+			handleError(res),
+			handleSuccess(res)
+		)
 	)
 
 	api.post('/adventures/:adventure_id/:type', authenticate, (req, res) =>

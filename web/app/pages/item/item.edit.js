@@ -122,6 +122,10 @@ export const view = (state, actions, match) =>
 			oninput: ev => actions.item_edit.updateForm([ 'description', ev.target.value ]),
 		}),
 		div({ class: 'button-container' }, [
+			Link({
+				class: 'btn',
+				to: state.location.previous,
+			}, 'Cancel'),
 			button({
 				class: 'btn primary',
 				onclick: () => actions.item_edit.save(),

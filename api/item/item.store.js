@@ -3,10 +3,10 @@ const Future = require('fluture')
 const { Result } = require('result')
 
 
-module.exports.makeFindItems = ({ db }) => ({ type, adventure_id, parent_id }) =>
+module.exports.makeFindItems = ({ db }) => ({ adventure_id }) =>
 	Future.node(done =>
 		db.collection('items')
-			.find({ type, adventure_id, parent_id })
+			.find({ adventure_id })
 			.toArray(done)
 	)
 	.map(Result.success)
