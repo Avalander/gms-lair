@@ -1,5 +1,6 @@
 import * as welcome from 'App/pages/welcome'
 import * as adventure from 'App/pages/adventure'
+import * as item from 'App/pages/item'
 
 
 export default [{
@@ -22,4 +23,13 @@ export default [{
 	path: '/adventures/:id/edit',
 	title: 'Adventure',
 	view: adventure.edit.view,
+}, {
+	path: '/adventures/:adventure_id/:type/new/edit',
+	view: item.edit.view,
+}, {
+	path: '/adventures/:adventure_id/:type/:id/edit',
+	view: item.edit.view,
+}, {
+	path: '/adventures/:adventure_id/:type/:id',
+	view: item.detail.view,
 }]

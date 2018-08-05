@@ -36,6 +36,12 @@ form {
 		min-height: 100px;
 		resize: vertical;
 	}
+
+	@media (max-width: 768px) {
+		.form-label {
+			display: none;
+		}
+	}
 }
 
 .button-container {

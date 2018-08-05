@@ -94,15 +94,15 @@ export const view = (state, actions, match) =>
 		div({ class: 'form-group' }, [
 			input({
 				id: 'title',
-				type: "text",
-				placeholder: "Title",
+				type: 'text',
+				placeholder: 'Title',
 				value: state.adventure_edit.form.title,
 				oninput: ev => actions.adventure_edit.updateForm([ 'title', ev.target.value ]),
 			})
 		]),
 		MarkdownEditor({
 			id: 'summary',
-			placeholder: "Summary",
+			placeholder: 'Summary',
 			value: state.adventure_edit.form.summary,
 			oninput: ev => actions.adventure_edit.updateForm([ 'summary', ev.target.value ]),
 		}),

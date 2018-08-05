@@ -38,20 +38,16 @@ module.exports = ({ Router, authenticate, findItems, findItem, saveItem }) => {
 		)
 	)
 
-	api.get('/adventures/:adventure_id/:item_id', authenticate, (req, res) =>
-		findItem({ _id: req.params.item_id })
-			.fork(
-				handleError(res),
-				handleSuccess(res)
-			)
-	)
-
 	api.get('/adventures/:adventure_id/:type/:item_id', authenticate, (req, res) =>
-		findItems(req.params.type, req.params.adventure_id, req.params.item_id)
-			.fork(
-				handleError(res),
-				handleSuccess(res)
-			)
+		findItem({
+			_id: req.params.item_id,
+			type: req.params.type,
+			adventure_id: req.params.adventure_id
+		})
+		.fork(
+			handleError(res),
+			handleSuccess(res)
+		)
 	)
 
 	return api

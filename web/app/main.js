@@ -6,6 +6,7 @@ import { Route, Switch, location } from '@hyperapp/router'
 import { Toolbar } from 'App/components'
 
 import * as adventure from 'App/pages/adventure'
+import * as item from 'App/pages/item'
 
 import routes from 'App/routes'
 import { makeFetchJson, makeGo } from 'App/fx'
@@ -18,6 +19,8 @@ const state = {
 	adventure_list: adventure.list.state,
 	adventure_edit: adventure.edit.state,
 	adventure_detail: adventure.detail.state,
+	item_edit: item.edit.state,
+	item_detail: item.detail.state,
 }
 
 const actions = {
@@ -25,6 +28,8 @@ const actions = {
 	adventure_list: adventure.list.actions,
 	adventure_edit: adventure.edit.actions,
 	adventure_detail: adventure.detail.actions,
+	item_edit: item.edit.actions,
+	item_detail: item.detail.actions,
 }
 
 const view = (state, actions) =>
