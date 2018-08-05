@@ -6,10 +6,10 @@ const base = {
 }
 
 const error_codes = {
-	OTHER: 1,
-	INVALID_DATA: 2,
-	INVALID_CREDENTIALS: 3,
-	NOT_FOUND: 4,
+	Other: 1,
+	InvalidData: 2,
+	InvalidCredentials: 3,
+	NotFound: 4,
 }
 
 const Result = Object.keys(error_codes)

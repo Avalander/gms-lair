@@ -19,7 +19,7 @@ module.exports.makeFindAdventure = ({ db }) => filters =>
 	.chain(value =>
 		value
 			? Future.of(Result.success(value))
-			: Future.reject(Result.NOT_FOUND('Adventure not found'))
+			: Future.reject(Result.NotFound('Adventure not found'))
 	)
 
 module.exports.makeSaveAdventure = ({ db, idGenerator, findAdventure }) => adventure =>

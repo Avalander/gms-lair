@@ -12,7 +12,7 @@ module.exports.makeFindUser = ({ db }) => (username, password) =>
 	.chain(user =>
 		(user && bcrypt.compareSync(password, user.password)
 			? Future.of(user)
-			: Future.reject(Result.INVALID_CREDENTIALS('User not found'))
+			: Future.reject(Result.InvalidCredentials('User not found'))
 		)
 	)
 
@@ -39,7 +39,7 @@ module.exports.makeRegisterUser = ({ db }) => ({ username, password, token }) =>
 		db.collection('users').findOne({ username }, done)
 	)
 	.chain(user => user
-		? Future.reject(Result.INVALID_DATA('Username already exists.'))
+		? Future.reject(Result.InvalidData('Username already exists.'))
 		: Future.of({})
 	)
 	.chain(() =>
@@ -52,7 +52,7 @@ module.exports.makeRegisterUser = ({ db }) => ({ username, password, token }) =>
 		Future.both(
 			value
 				? Future.of(value)
-				: Future.reject(Result.INVALID_DATA('Invalid token.')),
+				: Future.reject(Result.InvalidData('Invalid token.')),
 			hashPassword(password)
 		)
 	)

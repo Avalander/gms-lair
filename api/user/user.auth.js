@@ -8,12 +8,12 @@ const TOKEN_DURATION = 1 * 60 * 60
 module.exports.makeAuthenticate = ({ SECRET }) => (req, res, next) => {
 	const { bearer } = req.cookies
 	if (!bearer) {
-		res.json(Result.INVALID_CREDENTIALS('Invalid credentials'))
+		res.json(Result.InvalidCredentials('Invalid credentials'))
 		return
 	}
 	jwt.verify(bearer, SECRET, (err, decoded) => {
 		if (err) {
-			res.json(Result.INVALID_CREDENTIALS(err.message || err))
+			res.json(Result.InvalidCredentials(err.message || err))
 			return
 		}
 		req.bearer = decoded
