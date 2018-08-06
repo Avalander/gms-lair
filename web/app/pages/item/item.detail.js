@@ -66,7 +66,7 @@ const Success = ({ _id, name, description, type, adventure_id }) =>
 			Link({
 				class: 'btn',
 				to: `/adventures/${adventure_id}`,
-			}, 'Back to adventure'),
+			}, 'Back to Adventure'),
 			Link({
 				class: 'btn primary',
 				to: `/adventures/${adventure_id}/${type}/${_id}/edit`,
