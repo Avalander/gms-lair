@@ -84,9 +84,14 @@ const Success = items => ({ _id, title, summary }) =>
 			})
 		),
 		section({ class: 'button-container' }, [
-			Link({ class: 'btn primary', to: `/adventures/${_id}/edit` },
-				'Edit'
-			),
+			Link({
+				class: 'btn',
+				to: '/adventures'
+			}, 'Back to list'),
+			Link({
+				class: 'btn primary',
+				to: `/adventures/${_id}/edit`
+			}, 'Edit'),
 		]),
 	]
 
@@ -97,7 +102,7 @@ Items.Success = adventure_id => items =>
 	]
 
 const ItemList = (adventure_id, type, items) =>
-	section({ class: 'semi-panel' }, [
+	section({ class: 'semi-panel flex-column' }, [
 		header([
 			h2(toTitle(type)),
 		]),
