@@ -1,5 +1,17 @@
 {
-	"name": "Scene 1",
-	"description": "It was a dark night.",
-	"type": "scene"
+	"basic": {
+		"name": "Scene 1",
+		"description": "It was a dark night.",
+		"type": "scene"
+	},
+	"second": {
+		"name": "Scene 2",
+		"description": "The owls were rising.",
+		"type": "scene"
+	},
+	"markdown": {
+		"name": "Scene Markdown",
+		"description": "# The title\n\n> The blockquote",
+		"type": "scene"
+	}
 }

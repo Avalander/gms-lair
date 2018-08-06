@@ -51,12 +51,12 @@ Cypress.Commands.add('createItem', ({ adventure_id, type, name='Name', descripti
 	.then(({ data }) => Object.assign({ adventure_id, type, name, description }, data))
 })
 
-Cypress.Commands.add('createScene', ({ _id }) =>
+Cypress.Commands.add('createScene', ({ _id }, name='basic') =>
 	cy.fixture('scene.fixture.json')
-		.then(scene => 
+		.then(scenes => 
 			Object.assign(
 				{ adventure_id: _id },
-				scene,
+				scenes[name],
 			)
 		)
 		.then(scene =>

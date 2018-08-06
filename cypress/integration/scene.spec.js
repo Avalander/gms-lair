@@ -8,8 +8,8 @@ describe('Scenes', () => {
 		cy.clearDb('items')
 	})
 
-	describe('Adventure Detail', () => {
-		it('Can create a new scene', () => {
+	describe('Create scene', () => {
+		it('Can create a new scene from the adventure page', () => {
 			cy.createAdventure()
 				.then(({ data }) => {
 					// Go to create scene
@@ -36,7 +36,47 @@ describe('Scenes', () => {
 				})
 		}),
 
-		it('Shows existing scenes', () => {
+		it('Fails when name is empty', () => {
+			cy.createAdventure()
+				.then(({ data }) => data._id)
+				.then(adventure_id => {
+					cy.visit(`/adventures/${adventure_id}/scene/new/edit`)
+					cy.get('#description')
+						.type('Some text.')
+					cy.contains('Save')
+						.click()
+					cy.contains(`Missing key 'name'`)
+				})
+		})
+
+		it('Fails when description is empty', () => {
+			cy.createAdventure()
+				.then(({ data }) => data._id)
+				.then(adventure_id => {
+					cy.visit(`/adventures/${adventure_id}/scene/new/edit`)
+					cy.get('#name')
+						.type('Some text.')
+					cy.contains('Save')
+						.click()
+					cy.contains(`Missing key 'description'`)
+				})
+		})
+
+		it('Accepts markdown in the description', () => {
+			cy.createAdventure()
+				.then(({ data }) => cy.createScene(data, 'markdown'))
+				.then(({ _id, adventure_id }) => {
+					cy.visit(`/adventures/${adventure_id}/scene/${_id}`)
+					cy.get('.markdown-content')
+						.contains('h1', 'The title')
+					cy.get('.markdown-content')
+						.contains('blockquote', 'The blockquote')
+				})
+		})
+	})
+
+	describe('View scene', () => {
+		it('Shows existing scenes in the adventure page', () => {
 			cy.createAdventure()
 				.then(({ data }) => cy.createScene(data))
 				.then(({ _id, name, adventure_id }) => {
@@ -50,9 +90,7 @@ describe('Scenes', () => {
 						)
 				})
 		})
-	})
 
-	describe('View scene', () => {
 		it('Visits the scene detail page', () => {
 			cy.createAdventure()
 				.then(({ data }) => cy.createScene(data))
@@ -72,6 +110,26 @@ describe('Scenes', () => {
 							'href',
 							`/adventures/${adventure_id}`,
 						)
+				})
+		})
+
+		it('Does not show scenes of other adventures', () => {
+			cy.createAdventure()
+				.then(({ data }) => cy.createScene(data, 'basic'))
+				.then(scene => 
+					cy.createAdventure()
+						.then(({ data }) => cy.createScene(data, 'second'))
+						.then(scene_2 => ([ scene, scene_2 ]))
+				)
+				.then(([ scene_1, scene_2 ]) => {
+					cy.visit(`/adventures/${scene_1.adventure_id}`)
+					cy.contains(scene_1.name)
+						.should(
+							'have.attr',
+							'href',
+							`/adventures/${scene_1.adventure_id}/scene/${scene_1._id}`
+						)
+					cy.should('not.contain', scene_2.name)
 				})
 		})
 	})
@@ -102,6 +160,34 @@ describe('Scenes', () => {
 						.and('contain', `/adventures/${adventure_id}/scene/${_id}`)
 					cy.contains('The cursed potato')
 					cy.contains(`${description} The owls were rising.`)
+				})
+		})
+
+		it('Should not save changes on cancel', () => {
+			cy.createAdventure()
+				.then(({ data }) => cy.createScene(data))
+				.then(({ _id, name, description, adventure_id }) => {
+					cy.visit(`/adventures/${adventure_id}/scene/${_id}`)
+					cy.contains(name)
+					cy.contains('Edit')
+						.click()
+					cy.url()
+						.should('contain', `/adventures/${adventure_id}/scene/${_id}/edit`)
+					cy.get('#name')
+						.should('have.value', name)
+						.clear()
+						.type('The cursed potato')
+					cy.get('#description')
+						.should('have.value', description)
+						.type(' The owls were rising.')
+					cy.contains('Cancel')
+						.click()
+					
+					cy.url()
+						.should('not.contain', '/edit')
+						.and('contain', `/adventures/${adventure_id}/scene/${_id}`)
+					cy.contains(name)
+					cy.contains(description)
 				})
 		})
 	})
