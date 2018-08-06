@@ -1,3 +1,6 @@
+import urls from '../support/url'
+
+
 describe('Scenes', () => {
 	before(() => cy.createUser())
 	after(() => cy.deleteUser())
@@ -13,12 +16,12 @@ describe('Scenes', () => {
 			cy.createAdventure()
 				.then(({ data }) => {
 					// Go to create scene
-					cy.visit(`/adventures/${data._id}`)
+					cy.visit(urls.adventure.detail(data._id))
 					cy.contains('New Scene')
 						.click()
 					// Fill in form
 					cy.url()
-						.should('contain', `/adventures/${data._id}/scene/new/edit`)
+						.should('contain', urls.scene.create(data._id))
 					cy.get('#name')
 						.type('Scene 1')
 					cy.get('#description')
@@ -40,7 +43,7 @@ describe('Scenes', () => {
 			cy.createAdventure()
 				.then(({ data }) => data._id)
 				.then(adventure_id => {
-					cy.visit(`/adventures/${adventure_id}/scene/new/edit`)
+					cy.visit(urls.scene.create(adventure_id))
 					cy.get('#description')
 						.type('Some text.')
 					cy.contains('Save')
@@ -53,7 +56,7 @@ describe('Scenes', () => {
 			cy.createAdventure()
 				.then(({ data }) => data._id)
 				.then(adventure_id => {
-					cy.visit(`/adventures/${adventure_id}/scene/new/edit`)
+					cy.visit(urls.scene.create(adventure_id))
 					cy.get('#name')
 						.type('Some text.')
 					cy.contains('Save')
@@ -66,7 +69,7 @@ describe('Scenes', () => {
 			cy.createAdventure()
 				.then(({ data }) => cy.createScene(data, 'markdown'))
 				.then(({ _id, adventure_id }) => {
-					cy.visit(`/adventures/${adventure_id}/scene/${_id}`)
+					cy.visit(urls.scene.detail(adventure_id, _id))
 					cy.get('.markdown-content')
 						.contains('h1', 'The title')
 					cy.get('.markdown-content')
@@ -80,13 +83,13 @@ describe('Scenes', () => {
 			cy.createAdventure()
 				.then(({ data }) => cy.createScene(data))
 				.then(({ _id, name, adventure_id }) => {
-					cy.visit(`/adventures/${adventure_id}`)
+					cy.visit(urls.adventure.detail(adventure_id))
 					cy.contains('Scenes')
 					cy.contains(name)
 						.should(
 							'have.attr',
 							'href',
-							`/adventures/${adventure_id}/scene/${_id}`
+							urls.scene.detail(adventure_id, _id)
 						)
 				})
 		})
@@ -95,20 +98,20 @@ describe('Scenes', () => {
 			cy.createAdventure()
 				.then(({ data }) => cy.createScene(data))
 				.then(({ _id, name, adventure_id, description }) => {
-					cy.visit(`/adventures/${adventure_id}/scene/${_id}`)
+					cy.visit(urls.scene.detail(adventure_id, _id))
 					cy.contains(name)
 					cy.contains(description)
 					cy.contains('Edit')
 						.should(
 							'have.attr',
 							'href',
-							`/adventures/${adventure_id}/scene/${_id}/edit`,
+							urls.scene.edit(adventure_id, _id),
 						)
 					cy.contains('Back to Adventure')
 						.should(
 							'have.attr',
 							'href',
-							`/adventures/${adventure_id}`,
+							urls.adventure.detail(adventure_id),
 						)
 				})
 		})
@@ -122,12 +125,12 @@ describe('Scenes', () => {
 						.then(scene_2 => ([ scene, scene_2 ]))
 				)
 				.then(([ scene_1, scene_2 ]) => {
-					cy.visit(`/adventures/${scene_1.adventure_id}`)
+					cy.visit(urls.adventure.detail(scene_1.adventure_id))
 					cy.contains(scene_1.name)
 						.should(
 							'have.attr',
 							'href',
-							`/adventures/${scene_1.adventure_id}/scene/${scene_1._id}`
+							urls.scene.detail(scene_1.adventure_id, scene_1._id),
 						)
 					cy.should('not.contain', scene_2.name)
 				})
@@ -139,12 +142,12 @@ describe('Scenes', () => {
 			cy.createAdventure()
 				.then(({ data }) => cy.createScene(data))
 				.then(({ _id, name, adventure_id, description }) => {
-					cy.visit(`/adventures/${adventure_id}/scene/${_id}`)
+					cy.visit(urls.scene.detail(adventure_id, _id))
 					cy.contains(name)
 					cy.contains('Edit')
 						.click()
 					cy.url()
-						.should('contain', `/adventures/${adventure_id}/scene/${_id}/edit`)
+						.should('contain', urls.scene.edit(adventure_id, _id))
 					cy.get('#name')
 						.should('have.value', name)
 						.clear()
@@ -157,7 +160,7 @@ describe('Scenes', () => {
 					
 					cy.url()
 						.should('not.contain', '/edit')
-						.and('contain', `/adventures/${adventure_id}/scene/${_id}`)
+						.and('contain', urls.scene.detail(adventure_id, _id))
 					cy.contains('The cursed potato')
 					cy.contains(`${description} The owls were rising.`)
 				})
@@ -167,12 +170,12 @@ describe('Scenes', () => {
 			cy.createAdventure()
 				.then(({ data }) => cy.createScene(data))
 				.then(({ _id, name, description, adventure_id }) => {
-					cy.visit(`/adventures/${adventure_id}/scene/${_id}`)
+					cy.visit(urls.scene.detail(adventure_id, _id))
 					cy.contains(name)
 					cy.contains('Edit')
 						.click()
 					cy.url()
-						.should('contain', `/adventures/${adventure_id}/scene/${_id}/edit`)
+						.should('contain', urls.scene.edit(adventure_id, _id))
 					cy.get('#name')
 						.should('have.value', name)
 						.clear()
@@ -185,7 +188,7 @@ describe('Scenes', () => {
 					
 					cy.url()
 						.should('not.contain', '/edit')
-						.and('contain', `/adventures/${adventure_id}/scene/${_id}`)
+						.and('contain', urls.scene.detail(adventure_id, _id))
 					cy.contains(name)
 					cy.contains(description)
 				})
