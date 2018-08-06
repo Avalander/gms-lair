@@ -24,7 +24,7 @@ export const actions = {
 			[ true, action('clearForm') ],
 			[ true, action('updateForm', [ 'adventure_id', adventure_id ])],
 			[ true, action('updateForm', [ 'type', type ])],
-			[ id, action('fetchItem', id) ],
+			[ id, action('fetchItem', { id, adventure_id, type }) ],
 		]),
 	// Form
 	clearForm: () => state =>
@@ -58,9 +58,9 @@ export const actions = {
 			)
 		}),
 	// Network
-	fetchItem: id =>
+	fetchItem: ({ id, adventure_id, type }) =>
 		fetchJson(
-			`/api/items/${id}`,
+			`/api/adventures/${adventure_id}/${type}/${id}`,
 			'onFetchResponse',
 		),
 	onFetchResponse: result =>

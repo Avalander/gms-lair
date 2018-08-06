@@ -37,3 +37,29 @@ Cypress.Commands.add('createAdventure', (title='Test Adventure', summary='This i
 	})
 	.then(response => response.body)
 })
+
+Cypress.Commands.add('createItem', ({ adventure_id, type, name='Name', description='Description' }) => {
+	return cy.request({
+		url: `/api/adventures/${adventure_id}/${type}`,
+		method: 'POST',
+		body: {
+			name,
+			description,
+		}
+	})
+	.then(response => response.body)
+	.then(({ data }) => Object.assign({ adventure_id, type, name, description }, data))
+})
+
+Cypress.Commands.add('createScene', ({ _id }) =>
+	cy.fixture('scene.fixture.json')
+		.then(scene => 
+			Object.assign(
+				{ adventure_id: _id },
+				scene,
+			)
+		)
+		.then(scene =>
+			cy.createItem(scene)
+		)
+)
